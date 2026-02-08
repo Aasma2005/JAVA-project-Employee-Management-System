@@ -1,196 +1,140 @@
 import java.util.*;
 
-class GFG {
-  
-  // Class of Employee
-static class employee{
+class Employee {
+
     String name;
-    long code;
+    long id;
     String designation;
-    int exp;
+    int experience;
     int age;
+
+    // Constructor
+    Employee(String name, long id, String designation, int experience, int age) {
+        this.name = name;
+        this.id = id;
+        this.designation = designation;
+        this.experience = experience;
+        this.age = age;
+    }
 }
 
-static int num;
-static int max = 20;
-// Array of Employees to store the
-// data in the form of the Structure
-// of the Array
-static employee emp[] = new employee[max];
-static employee tempemp[] = new employee[max];
-static employee sortemp[] = new employee[max];
-static employee sortemp1[] = new employee[max];
-static  Scanner sc = new Scanner(System.in);   
-// Function to build the given datatype
-static void build()
-{
-     System.out.println("Build The Table\n");
-     System.out.println("Maximum Entries can be " + max);
+public class App {
 
-     System.out.println("Enter the number of " + "Entries required");
- 
-  
-  num = sc.nextInt();
+    static Scanner sc = new Scanner(System.in);
+    static ArrayList<Employee> empList = new ArrayList<>();
 
-    if (num > 20) {
-         System.out.println("Maximum number of "+"Entries are 20");
-        num = 20;
-    }
-     System.out.println("Enter the following data:");
+    // Insert Employee
+    static void insertEmployee() {
+        System.out.print("Enter Name: ");
+        String name = sc.next();
 
-    for (int i = 0; i < num; i++) {
-        System.out.print("Name ");
-        emp[i].name = sc.next();
+        System.out.print("Enter Employee ID: ");
+        long id = sc.nextLong();
 
-        System.out.print("Employee ID ");
-        emp[i].code = sc.nextLong();
+        System.out.print("Enter Designation: ");
+        String designation = sc.next();
 
-        System.out.print("Designation ");
-        emp[i].designation = sc.next();
+        System.out.print("Enter Experience: ");
+        int exp = sc.nextInt();
 
-        System.out.print("Experience ");
-        emp[i].exp = sc.nextInt();
+        System.out.print("Enter Age: ");
+        int age = sc.nextInt();
 
-        System.out.print("Age ");
-        emp[i].age = sc.nextInt();
+        empList.add(new Employee(name, id, designation, exp, age));
+        System.out.println("✅ Employee Added Successfully\n");
     }
 
-    showMenu();
-}
+    // Search Employee
+    static void searchEmployee() {
+        System.out.print("Enter Employee ID to Search: ");
+        long id = sc.nextLong();
 
-// Function to insert the data into
-// given data type
-static void insert()
-{
-    if (num < max) {
-        int i = num;
-        num++;
-
-        System.out.print("Enter the information " + "of the Employee");
-        System.out.print("Name ");
-        emp[i].name = sc.next();
-
-        System.out.print("Employee ID ");
-        emp[i].code = sc.nextLong();
-
-        System.out.print("Designation ");
-        emp[i].designation = sc.next();
-
-        System.out.print("Experience ");
-        emp[i].exp = sc.nextInt();
-
-        System.out.print("Age ");
-        emp[i].age = sc.nextInt();
-    }
-    else {
-        System.out.println("Employee Table Full");
-    }
-
-    showMenu();
-}
-
-// Function to delete record at index i
-static void deleteIndex(int i)
-{
-    for (int j = i; j < num - 1; j++) {
-        emp[j].name = emp[j + 1].name;
-        emp[j].code = emp[j + 1].code;
-        emp[j].designation = emp[j + 1].designation;
-        emp[j].exp = emp[j + 1].exp;
-        emp[j].age = emp[j + 1].age;
-    }
-    return;
-}
-
-// Function to delete record
-static void deleteRecord()
-{
-    System.out.println("Enter the Employee ID "+ "to Delete Record");
-
-    int code = sc.nextInt();
-
-  
-    for (int i = 0; i < num; i++) {
-        if (emp[i].code == code) {
-            deleteIndex(i);
-            num--;
-            break;
+        for (Employee e : empList) {
+            if (e.id == id) {
+                System.out.println("\nEmployee Found");
+                System.out.println("Name: " + e.name);
+                System.out.println("ID: " + e.id);
+                System.out.println("Designation: " + e.designation);
+                System.out.println("Experience: " + e.experience);
+                System.out.println("Age: " + e.age + "\n");
+                return;
+            }
         }
+        System.out.println("❌ Employee Not Found\n");
     }
-    showMenu();
-}
 
-static void searchRecord()
-{
-    System.out.println("Enter the Employee"+" ID to Search Record");
+    // Delete Employee
+    static void deleteEmployee() {
+        System.out.print("Enter Employee ID to Delete: ");
+        long id = sc.nextLong();
 
-    int code = sc.nextInt();
+        Iterator<Employee> it = empList.iterator();
+        while (it.hasNext()) {
+            Employee e = it.next();
+            if (e.id == id) {
+                it.remove();
+                System.out.println("✅ Employee Deleted Successfully\n");
+                return;
+            }
+        }
+        System.out.println("❌ Employee Not Found\n");
+    }
 
-    for (int i = 0; i < num; i++) {
+    // Display All Employees
+    static void displayAll() {
+        if (empList.isEmpty()) {
+            System.out.println("❌ No Employees Available\n");
+            return;
+        }
 
-        // If the data is found
-        if (emp[i].code == code) {
-            System.out.println("Name " + emp[i].name);
+        System.out.println("\nEmployee List:");
+        for (Employee e : empList) {
+            System.out.println("----------------------");
+            System.out.println("Name: " + e.name);
+            System.out.println("ID: " + e.id);
+            System.out.println("Designation: " + e.designation);
+            System.out.println("Experience: " + e.experience);
+            System.out.println("Age: " + e.age);
+        }
+        System.out.println();
+    }
 
-            System.out.println("Employee ID " + emp[i].code);
+    // Menu
+    static void menu() {
+        while (true) {
+            System.out.println("------ Employee Management System ------");
+            System.out.println("1. Insert Employee");
+            System.out.println("2. Search Employee");
+            System.out.println("3. Delete Employee");
+            System.out.println("4. Display All Employees");
+            System.out.println("5. Exit");
+            System.out.print("Choose Option: ");
 
-            System.out.println("Designation " + emp[i].designation);
+            int choice = sc.nextInt();
 
-            System.out.println("Experience " + emp[i].exp);
-
-            System.out.println("Age " + emp[i].age);
-            break;
+            switch (choice) {
+                case 1:
+                    insertEmployee();
+                    break;
+                case 2:
+                    searchEmployee();
+                    break;
+                case 3:
+                    deleteEmployee();
+                    break;
+                case 4:
+                    displayAll();
+                    break;
+                case 5:
+                    System.out.println("✅ Exiting Application");
+                    return;
+                default:
+                    System.out.println("❌ Invalid Choice\n");
+            }
         }
     }
 
-    showMenu();
-}
-
-// Function to show menu
-static void showMenu()
-{
-
-    System.out.println("-------------------------"
-         + " Employee"
-         + " Management System"
-         + "-------------------------\n");
-
-    System.out.println("Available Options:\n");
-    System.out.print("Build Table         (1)\n");
-    System.out.print("Insert New Entry    (2)\n");
-    System.out.print("Delete Entry        (3)\n");
-    System.out.print("Search a Record     (4)\n");
-    System.out.print("Exit                (5)\n");
-
-    int option = sc.nextInt();
-
-    // Input Options
-    // Call function on the basis of the
-    // above option
-    if (option == 1) {
-        build();
-    }
-    else if (option == 2) {
-        insert();
-    }
-    else if (option == 3) {
-        deleteRecord();
-    }
-    else if (option == 4) {
-        searchRecord();
-    }
-    else if (option == 5) {
-        return;
-    }
-    else {
-        System.out.println("Expected Options" + " are 1/2/3/4/5");
-        showMenu();
+    public static void main(String[] args) {
+        menu();
     }
 }
-  
-    public static void main (String[] args) {
-       showMenu();
-    }
-}
-
-// This code is contributed by aadityaburujwale.
